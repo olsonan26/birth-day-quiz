@@ -5,15 +5,14 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { api } from "../convex/_generated/api";
 import {
   accuracyReassurance,
-  bonuses,
   criticalPositioning,
   offerBullets,
+  offerStackItems,
   productTransition,
   questions,
   resultsData,
   typeLabels,
   typeSpecificCTAs,
-  valueStack,
 } from "./data";
 
 type Screen =
@@ -32,7 +31,7 @@ interface QuestionSelection {
   secondary: TypeKey | null;
 }
 
-const CHECKOUT_URL = "https://thedayofbirth.mysamcart.com/the-day-your-child-was-born-es5no/";
+const CHECKOUT_URL = "https://thedayofbirth.mysamcart.com/checkout-page";
 
 const fade = {
   initial: { opacity: 0, y: 16 },
@@ -1471,28 +1470,58 @@ function OfferScreen({ onCheckout }: { onCheckout: () => void }) {
             You're about to get the full blueprint that explains how your child is wired so you can stop guessing and start knowing exactly what to do.
           </p>
 
-          {/* Value stack */}
-          <div className="text-left max-w-md mx-auto mb-10">
-            <p className="text-sm font-semibold text-white/80 mb-4">
-              Today, you'll get:
-            </p>
-            {valueStack.map((v, i) => (
-              <div key={i} className="flex items-start gap-3 mb-3">
-                <Check className="w-4 h-4 text-white/60 shrink-0 mt-1" />
-                <p className="text-base leading-[1.6] text-white/80 font-semibold">{v}</p>
+          {/* Headline above stack */}
+          <h3 className="font-[family-name:var(--font-heading)] text-xl md:text-2xl font-bold leading-[1.3] text-white mb-8 max-w-md mx-auto">
+            💥 Understand Your Child On A Level Most Parents Never Do— <span className="text-[#D4725C]">Starting Today</span>
+          </h3>
+
+          <p className="text-sm font-semibold tracking-wide uppercase text-white/60 mb-6 max-w-md mx-auto text-left">
+            🧠 The Core Offer
+          </p>
+
+          {/* Value stack items */}
+          <div className="text-left max-w-md mx-auto mb-10 space-y-8">
+            {offerStackItems.map((item, i) => (
+              <div key={i} className="space-y-2">
+                <p className="text-base leading-[1.6] text-white font-semibold">
+                  {item.emoji} <span className="text-white">{item.title}</span> — <span className="text-[#D4725C]">{item.value} Value</span>
+                </p>
+                <p className="text-sm leading-[1.6] text-white/70">{item.description}</p>
+                {item.bullets && item.bullets.length > 0 && (
+                  <ul className="space-y-1 ml-1">
+                    {item.bullets.map((bullet, j) => (
+                      <li key={j} className="flex items-start gap-2 text-sm leading-[1.6] text-white/70">
+                        <span className="shrink-0 mt-0.5">•</span>
+                        <span>{bullet}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+                {item.callout && (
+                  <p className="text-sm leading-[1.6] text-white/50 italic">
+                    👉 {item.callout}
+                  </p>
+                )}
               </div>
             ))}
 
-            <div className="mt-6 space-y-3">
-              {bonuses.map((b, i) => (
-                <div key={i} className="flex items-start gap-3">
-                  <Zap className="w-4 h-4 text-[#D4725C] shrink-0 mt-1" />
-                  <p className="text-base leading-[1.6] text-white/70">
-                    <span className="font-semibold text-[#D4725C]">FREE BONUS: </span>
-                    {b}
-                  </p>
+            {/* Total value summary */}
+            <div className="border-t border-white/20 pt-6 space-y-2">
+              <p className="text-sm font-semibold text-white/60 uppercase tracking-wide mb-3">💰 Total Value Stack</p>
+              {offerStackItems.map((item, i) => (
+                <div key={i} className="flex items-center justify-between text-sm text-white/70">
+                  <span>{item.title}</span>
+                  <span className="font-semibold">{item.value}</span>
                 </div>
               ))}
+              <div className="border-t border-white/20 pt-3 mt-3">
+                <p className="text-lg font-bold text-white">
+                  💥 TOTAL VALUE: <span className="text-[#D4725C]">$465</span>
+                </p>
+              </div>
+              <p className="text-xl font-bold text-white">
+                🔥 YOUR PRICE TODAY: <span className="text-[#D4725C]">Just $47</span>
+              </p>
             </div>
           </div>
 
@@ -1523,11 +1552,11 @@ function OfferScreen({ onCheckout }: { onCheckout: () => void }) {
             <div className="flex items-center gap-3 mb-6">
               <Shield className="w-6 h-6 text-[#2F4F3F]" />
               <h2 className="font-[family-name:var(--font-heading)] text-xl font-bold leading-[1.2] text-[#1A1A1A]">
-                14-Day Guarantee
+                7-Day Money Back Guarantee
               </h2>
             </div>
             <p className="text-base leading-[1.6] text-[#666] mb-2">
-              Try it for 14 days.
+              Try it for 7 days.
             </p>
             <p className="text-base leading-[1.6] text-[#666]">
               If it does not give you more clarity and confidence, you get your money back.
